@@ -20,7 +20,8 @@ const row = props => {
           editable={elm.editable}
           key={elm.key}
           keyProp={elm.key}
-          val={elm.value}
+		  val={elm.value}
+		  keyDown={(e) => props.keyDown(e, {elmData: elm, elm: props.data})}
         />
       ))}
     </tr>;

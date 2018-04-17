@@ -9,7 +9,8 @@ const body = props => (
         clicked={(event, key) => props.clicked(event, {key, id: elm.id})}
         changed={props.changed}
         key={elm.id}
-        data={elm}
+		data={elm}
+		keyDown={props.keyDown}
       />
     ))}
   </tbody>
