@@ -4,7 +4,14 @@ import Row from "./Row/Row";
 
 const body = props => (
   <tbody>
-    {props.data.map(elm => <Row key={elm.id} data={elm}/>)}
+    {props.data.map(elm => (
+      <Row
+        clicked={(event, key) => props.clicked(event, {key, id: elm.id})}
+        changed={props.changed}
+        key={elm.id}
+        data={elm}
+      />
+    ))}
   </tbody>
 );
 
