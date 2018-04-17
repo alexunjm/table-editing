@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 
-import Layout from './components/Layout/Layout'
+import Layout from "./components/Layout/Layout";
+import TableContainer from './containers/Table/TableContainer';
 
 class App extends Component {
   render() {
-    return (
-      <div>
-		  <Layout>
-			  <p> layout example </p>
-		  </Layout>
-      </div>
-    );
+    return <div>
+        <Layout>
+          <TableContainer />
+        </Layout>
+      </div>;
   }
 }
 
