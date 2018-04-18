@@ -186,7 +186,6 @@ class TableContainer extends Component {
           keyDown={this.onKeyPressed}
           blurred={this.blurHandler}
         />
-		<input/>
       </div>
     );
   }
