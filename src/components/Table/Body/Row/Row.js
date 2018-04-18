@@ -2,6 +2,8 @@ import React from "react";
 
 import Editable from './Editable/Editable';
 
+import classes from "../../Table.css";
+
 const row = props => {
 	let keys = [];
 	for (let key in props.data) {
@@ -12,7 +14,7 @@ const row = props => {
 		keys.push(data);
 	}
 
-	return <tr>
+	return <tr className={classes.borderTop}>
       {keys.map(elm => (
         <Editable
           clicked={props.clicked}

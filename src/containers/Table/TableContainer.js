@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import Table from "../../components/Table/Table";
 import { maxInArrayByKey } from "../../customjs/custom";
 
+import classes from "../../components/Table/Table.css";
+
 class TableContainer extends Component {
   state = {
     /**
@@ -235,13 +237,16 @@ class TableContainer extends Component {
     let button = "";
     let newElmButton = "";
     if (this.state.data.length) {
-      button = (
+      button = (<div className={classes.divFloated}>
         <button onClick={this.arrowsNavHandler}>
           {this.state.arrowInsideInputs ? "Habilitar " : "Deshabilitar "}
           navegación con flechas rápida
         </button>
+		</div>
       );
-      newElmButton = <button onClick={this.addNewElement}>Nuevo</button>;
+      newElmButton = <div className={[classes.flexCenter, classes.divSpacing].join(" ")}>
+          <button onClick={this.addNewElement}>Nuevo</button>
+        </div>;
     }
 
     return (
