@@ -215,6 +215,13 @@ class TableContainer extends Component {
   };
 
   render() {
+	  let button = '';
+	  if (this.state.data.length) {
+		button = <button onClick={this.arrowsNavHandler}>
+			{this.state.arrowInsideInputs ? "Habilitar" : "Deshabilitar"}{" "}
+			navegación con flechas rápida
+		</button>;
+		}
     return (
       <div>
         <Table
@@ -225,9 +232,7 @@ class TableContainer extends Component {
           focused={this.focusHandler}
           blurred={this.blurHandler}
         />
-        <button onClick={this.arrowsNavHandler}>
-          {this.state.arrowInsideInputs ? 'Habilitar' : 'Deshabilitar' } navegación con flechas rápida
-        </button>
+        {button}
       </div>
     );
   }
