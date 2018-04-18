@@ -16,12 +16,15 @@ const row = props => {
       {keys.map(elm => (
         <Editable
           clicked={props.clicked}
-          changed={event => props.changed(event, {id: props.data.id, key: elm.key})}
+          changed={event =>
+            props.changed(event, { id: props.data.id, key: elm.key })
+          }
           editable={elm.editable}
           key={elm.key}
           keyProp={elm.key}
-		  val={elm.value}
-		  keyDown={(e) => props.keyDown(e, {elmData: elm, elm: props.data})}
+          val={elm.value}
+          blurred={props.blurred}
+          keyDown={e => props.keyDown(e, { elmData: elm, elm: props.data })}
         />
       ))}
     </tr>;
