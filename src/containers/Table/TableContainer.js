@@ -89,90 +89,97 @@ class TableContainer extends Component {
   /**
    * Función que maneja el evento de flechas presionadas en el teclado
    */
-  onKeyPressed = (event, data, upNDownArgs) => {
-	  event.preventDefault();
+  onKeyDown = (event, data, upNDownArgs) => {
     //valida si es un evento de flecha
-    if (event.which < 37 && event.which > 40) return;
-    /**
-     * saca las propiedades de el objeto data.elm
-     */
-    const keys = [];
-    for (let key in data.elm) {
-      keys.push(key);
-    }
-    /**
-     * saca el índice de las propiedades que tengan la key data.elmData.key
-     * (la key del input que se está editando)
-     */
-    const index = keys.findIndex(key => key === data.elmData.key);
-    /**
-     * Obtiene el key y el value de cada elemento junto al input que se está editando
-     */
-    const result = {
-      prev: { key: keys[index - 1] === 'id' ? null : keys[index - 1], val: data.elm[keys[index - 1]] },
-      curr: { key: keys[index], val: data.elm[keys[index]] },
-      next: { key: keys[index + 1] === 'id' ? null : keys[index + 1], val: data.elm[keys[index + 1]] },
-      up: {
-        key: keys[index],
-        val: this.getValFromArray(
-          upNDownArgs.array,
-          upNDownArgs.index - 1,
-          keys[index]
-        )
-      },
-      down: {
-        key: keys[index],
-        val: this.getValFromArray(
-          upNDownArgs.array,
-          upNDownArgs.index + 1,
-          keys[index]
-        )
+    if (event.which >= 37 && event.which <= 40) {
+      event.preventDefault();
+      /**
+       * saca las propiedades de el objeto data.elm
+       */
+      const keys = [];
+      for (let key in data.elm) {
+        keys.push(key);
       }
-    };
-    const id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
-    switch (event.which) {
-      case 37: // left
-        if (result.prev.key)
-          this.changeData({ id, key: result.prev.key }, null);
-        break;
+      /**
+       * saca el índice de las propiedades que tengan la key data.elmData.key
+       * (la key del input que se está editando)
+       */
+      const index = keys.findIndex(key => key === data.elmData.key);
+      /**
+       * Obtiene el key y el value de cada elemento junto al input que se está editando
+       */
+      const result = {
+        prev: {
+          key: keys[index - 1] === "id" ? null : keys[index - 1],
+          val: data.elm[keys[index - 1]]
+        },
+        curr: { key: keys[index], val: data.elm[keys[index]] },
+        next: {
+          key: keys[index + 1] === "id" ? null : keys[index + 1],
+          val: data.elm[keys[index + 1]]
+        },
+        up: {
+          key: keys[index],
+          val: this.getValFromArray(
+            upNDownArgs.array,
+            upNDownArgs.index - 1,
+            keys[index]
+          )
+        },
+        down: {
+          key: keys[index],
+          val: this.getValFromArray(
+            upNDownArgs.array,
+            upNDownArgs.index + 1,
+            keys[index]
+          )
+        }
+      };
+      const id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
+      switch (event.which) {
+        case 37: // left
+          if (result.prev.key)
+            this.changeData({ id, key: result.prev.key }, null);
+          break;
 
-      case 38: // up
-        if (result.up.val)
-          this.changeData(
-            {
-              id: this.getValFromArray(
-                upNDownArgs.array,
-                upNDownArgs.index - 1,
-                "id"
-              ),
-              key: result.up.key
-            },
-            null
-          );
-        break;
+        case 38: // up
+          if (result.up.val)
+            this.changeData(
+              {
+                id: this.getValFromArray(
+                  upNDownArgs.array,
+                  upNDownArgs.index - 1,
+                  "id"
+                ),
+                key: result.up.key
+              },
+              null
+            );
+          break;
 
-      case 39: // right
-        if (result.next.key)
-          this.changeData({ id, key: result.next.key }, null);
-        break;
+        case 39: // right
+          if (result.next.key)
+            this.changeData({ id, key: result.next.key }, null);
+          break;
 
-      case 40: // down
-        if (result.down.val)
-          this.changeData(
-            {
-              id: this.getValFromArray(
-                upNDownArgs.array,
-                upNDownArgs.index + 1,
-                "id"
-              ),
-              key: result.down.key
-            },
-            null
-          );
-        break;
+        case 40: // down
+          if (result.down.val)
+            this.changeData(
+              {
+                id: this.getValFromArray(
+                  upNDownArgs.array,
+                  upNDownArgs.index + 1,
+                  "id"
+                ),
+                key: result.down.key
+              },
+              null
+            );
+          break;
 
-      default:
-        return; // exit this handler for other keys
+        default:
+          return; // exit this handler for other keys
+      }
     }
   };
 
@@ -183,7 +190,7 @@ class TableContainer extends Component {
           clicked={this.tdToInputEditableHandler}
           changed={this.changeInputValueHandler}
           data={this.state.data}
-          keyDown={this.onKeyPressed}
+          keyDown={this.onKeyDown}
           blurred={this.blurHandler}
         />
       </div>
