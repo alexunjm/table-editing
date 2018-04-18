@@ -10,8 +10,9 @@ const body = props => (
         changed={props.changed}
         key={elm.id}
         data={elm}
-        keyDown={(e, data) => props.keyDown(e, data, { index, array })}
+        focused={props.focused}
         blurred={props.blurred}
+        keyDown={(e, data) => props.keyDown(e, data, { index, array })}
       />
     ))}
   </tbody>

@@ -11,6 +11,7 @@ const table = props => (
       clicked={props.clicked}
       changed={props.changed}
       data={props.data}
+      focused={props.focused}
       blurred={props.blurred}
     />
   </table>

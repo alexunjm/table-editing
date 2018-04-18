@@ -23,6 +23,7 @@ const row = props => {
           key={elm.key}
           keyProp={elm.key}
           val={elm.value}
+          focused={props.focused}
           blurred={props.blurred}
           keyDown={e => props.keyDown(e, { elmData: elm, elm: props.data })}
         />

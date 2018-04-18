@@ -10,7 +10,7 @@ class TableContainer extends Component {
     data: [
       { id: 1, nombre: "alex", apellido: "jaramillo" },
       { id: 2, nombre: "andrea", apellido: "laguna" },
-      { id: 3, nombre: "valentina", apellido: "c" },
+      { id: 3, nombre: "valentina", apellido: "" },
       { id: 6, nombre: "cristian", apellido: "buenaño" },
       { id: 7, nombre: "luisa", apellido: "lopez" }
     ]
@@ -22,7 +22,7 @@ class TableContainer extends Component {
      */
     return this.state.data.map(elm => {
       for (let key in elm) {
-        if (elm[key]["editable"]) {
+        if (elm[key].hasOwnProperty("editable")) {
           elm[key] = elm[key]["editable"];
         }
       }
@@ -52,7 +52,9 @@ class TableContainer extends Component {
    */
   changeData = (data, value) => {
     const res = this.getDataNElmById(data.id);
-    res.elm[data.key] = { editable: value ? value : res.elm[data.key] };
+    res.elm[data.key] = {
+      editable: value || value === "" ? value : res.elm[data.key]
+    };
     this.setData(res.Data);
   };
 
@@ -62,6 +64,10 @@ class TableContainer extends Component {
    */
   changeInputValueHandler = (event, data) => {
     this.changeData(data, event.target.value);
+  };
+
+  focusHandler = event => {
+    event.target.select();
   };
 
   /**
@@ -143,7 +149,7 @@ class TableContainer extends Component {
           break;
 
         case 38: // up
-          if (result.up.val)
+          if (result.up.val || result.up.val === "")
             this.changeData(
               {
                 id: this.getValFromArray(
@@ -163,7 +169,7 @@ class TableContainer extends Component {
           break;
 
         case 40: // down
-          if (result.down.val)
+          if (result.down.val || result.down.val === "")
             this.changeData(
               {
                 id: this.getValFromArray(
@@ -191,6 +197,7 @@ class TableContainer extends Component {
           changed={this.changeInputValueHandler}
           data={this.state.data}
           keyDown={this.onKeyDown}
+          focused={this.focusHandler}
           blurred={this.blurHandler}
         />
       </div>

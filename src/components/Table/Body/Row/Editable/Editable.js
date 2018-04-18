@@ -6,11 +6,19 @@ const editable = props => {
         {props.val.editable ? props.val.editable : props.val}
       </td>;
 	}
-	if(props.val.editable) {
-		return <td>
-        <input className="max-w" onChange={props.changed} value={props.val.editable} autoFocus="true" onBlur={props.blurred} onKeyDown={props.keyDown} tabIndex="0" />
+	if (props.val.hasOwnProperty("editable")) {
+    return <td>
+		<input
+			onChange={props.changed}
+			value={props.val.editable}
+			onFocus={props.focused}
+			onBlur={props.blurred}
+			onKeyDown={props.keyDown}
+			autoFocus="true"
+			className="max-w"
+			tabIndex="0" />
       </td>;
-	}
+  }
 	return <td onClick={(event) => props.clicked(event, props.keyProp)}>{props.val}</td>;
 }
 
