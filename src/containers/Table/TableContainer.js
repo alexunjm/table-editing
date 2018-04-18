@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Table from "../../components/Table/Table";
+import { maxInArrayByKey } from "../../customjs/custom";
 
 class TableContainer extends Component {
   state = {
@@ -34,8 +35,8 @@ class TableContainer extends Component {
   /**
    * Actualizamos los datos del container
    */
-  setData(Data) {
-    this.setState({ Data });
+  setData(data) {
+    this.setState({ data });
   }
 
   /**
@@ -193,13 +194,15 @@ class TableContainer extends Component {
       if (this.state.arrowInsideInputs) {
         if (event.which === 37) {
           const position = event.target.selectionStart;
-          if (position > 0) {/* console.log("no navega", { position }); */}
-          else this.navigation(event, data, upNDownArgs);
+          if (position > 0) {
+            /* console.log("no navega", { position }); */
+          } else this.navigation(event, data, upNDownArgs);
         } else if (event.which === 39) {
           const val = event.target.value;
           const position = event.target.selectionStart;
-          if (position < val.length) {/* console.log("no navega", { position, len: val.length }); */}
-          else this.navigation(event, data, upNDownArgs);
+          if (position < val.length) {
+            /* console.log("no navega", { position, len: val.length }); */
+          } else this.navigation(event, data, upNDownArgs);
         } else this.navigation(event, data, upNDownArgs);
       } else {
         this.navigation(event, data, upNDownArgs);
@@ -210,18 +213,37 @@ class TableContainer extends Component {
   /**
    * Habilita o deshabilita las flechas dentro de input
    */
-  arrowsNavHandler = (event) => {
+  arrowsNavHandler = event => {
     this.setState({ arrowInsideInputs: !this.state.arrowInsideInputs });
   };
 
+  /**
+   * Agrega un nuevo elemento a los datos
+   */
+  addNewElement = () => {
+    const data = this.getData();
+    const newElm = { ...data[0] };
+    for (let key in newElm) {
+      newElm[key] = "";
+    }
+    newElm.id = maxInArrayByKey(data, "id") + 1;
+    data.push(newElm);
+    this.setData(data);
+  };
+
   render() {
-	  let button = '';
-	  if (this.state.data.length) {
-		button = <button onClick={this.arrowsNavHandler}>
-			{this.state.arrowInsideInputs ? "Habilitar" : "Deshabilitar"}{" "}
-			navegación con flechas rápida
-		</button>;
-		}
+    let button = "";
+    let newElmButton = "";
+    if (this.state.data.length) {
+      button = (
+        <button onClick={this.arrowsNavHandler}>
+          {this.state.arrowInsideInputs ? "Habilitar " : "Deshabilitar "}
+          navegación con flechas rápida
+        </button>
+      );
+      newElmButton = <button onClick={this.addNewElement}>Nuevo</button>;
+    }
+
     return (
       <div>
         <Table
@@ -233,6 +255,7 @@ class TableContainer extends Component {
           blurred={this.blurHandler}
         />
         {button}
+        {newElmButton}
       </div>
     );
   }
