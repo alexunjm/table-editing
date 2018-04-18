@@ -3,12 +3,12 @@
 }
 
 .tableStriped> tbody tr:nth-of-type(odd) {
-  background-color: rgb(255, 240, 240);
+  background-color: var(--stripped-odd-bd-color);
 }
 
 .tableStriped> thead tr {
-  background-color: rgb(255, 110, 100);
-  color: white;
+  background-color: var(--main-bg-color);
+  color: var(--main-color);
 }
 
 .tdBorder {
