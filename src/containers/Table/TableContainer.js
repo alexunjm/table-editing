@@ -9,7 +9,10 @@ class TableContainer extends Component {
      */
     data: [
       { id: 1, nombre: "alex", apellido: "jaramillo" },
-      { id: 2, nombre: "andrea", apellido: "laguna" }
+      { id: 2, nombre: "andrea", apellido: "laguna" },
+      { id: 3, nombre: "valentina", apellido: "c" },
+      { id: 6, nombre: "cristian", apellido: "buenaño" },
+      { id: 7, nombre: "luisa", apellido: "lopez" }
     ]
   };
 
@@ -87,6 +90,7 @@ class TableContainer extends Component {
    * Función que maneja el evento de flechas presionadas en el teclado
    */
   onKeyPressed = (event, data, upNDownArgs) => {
+	  event.preventDefault();
     //valida si es un evento de flecha
     if (event.which < 37 && event.which > 40) return;
     /**
@@ -105,16 +109,24 @@ class TableContainer extends Component {
      * Obtiene el key y el value de cada elemento junto al input que se está editando
      */
     const result = {
-      prev: { key: keys[index - 1], val: data.elm[keys[index - 1]] },
+      prev: { key: keys[index - 1] === 'id' ? null : keys[index - 1], val: data.elm[keys[index - 1]] },
       curr: { key: keys[index], val: data.elm[keys[index]] },
-      next: { key: keys[index + 1], val: data.elm[keys[index + 1]] },
+      next: { key: keys[index + 1] === 'id' ? null : keys[index + 1], val: data.elm[keys[index + 1]] },
       up: {
         key: keys[index],
-        val: this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, keys[index])
+        val: this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index - 1,
+          keys[index]
+        )
       },
       down: {
         key: keys[index],
-        val: this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, keys[index])
+        val: this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index + 1,
+          keys[index]
+        )
       }
     };
     const id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
@@ -128,7 +140,11 @@ class TableContainer extends Component {
         if (result.up.val)
           this.changeData(
             {
-              id: this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, "id"),
+              id: this.getValFromArray(
+                upNDownArgs.array,
+                upNDownArgs.index - 1,
+                "id"
+              ),
               key: result.up.key
             },
             null
@@ -144,7 +160,11 @@ class TableContainer extends Component {
         if (result.down.val)
           this.changeData(
             {
-              id: this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, "id"),
+              id: this.getValFromArray(
+                upNDownArgs.array,
+                upNDownArgs.index + 1,
+                "id"
+              ),
               key: result.down.key
             },
             null
@@ -166,6 +186,7 @@ class TableContainer extends Component {
           keyDown={this.onKeyPressed}
           blurred={this.blurHandler}
         />
+		<input/>
       </div>
     );
   }

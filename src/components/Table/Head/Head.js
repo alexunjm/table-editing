@@ -8,7 +8,9 @@ const head = props => {
 
 	return <thead>
       <tr>
-        {keys.map(col => <th key={col.id}>{col.name}</th>)}
+        {keys.map(col => (
+          <th key={col.id}>{col.name === "id" ? "#" : col.name}</th>
+        ))}
       </tr>
     </thead>;
 };

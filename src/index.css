@@ -3,3 +3,26 @@ body {
   padding: 0;
   font-family: 'Lora', sans-serif;
 }
+
+td, td>input {
+	width: 90px;
+}
+
+td:first-child {
+	width: initial;
+}
+
+td {
+	text-align: left;
+	padding: 5px;
+	border: 1px solid;
+}
+
+td>input {
+	max-width: 100%;
+	border: none;
+	outline: none;
+	font-family: 'Lora';
+	font-size: 1rem;
+	
+}
