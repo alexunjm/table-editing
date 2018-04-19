@@ -27,7 +27,8 @@ class TableContainer extends Component {
     return arrayFlattenProp(
       this,
       this.state.data,
-      (key, val, item) => val.hasOwnProperty("editable") ? val["editable"] : val
+      (key, val, item) =>
+        val.hasOwnProperty("editable") ? val["editable"] : val
     );
   }
 
@@ -93,6 +94,15 @@ class TableContainer extends Component {
   getValFromArray = (array, index, key) =>
     array[index] ? array[index][key] : null;
 
+  /**
+   * Encuentra la primera columna editable de la fila actual
+   */
+  findFirstColEditable = (keys, index) => {
+    while (--index >= 0) {
+      return keys[index] === "id" ? keys[index + 1] : this.findFirstColEditable(keys, index);
+    }
+  };
+
   navigation(event, data, upNDownArgs) {
     event.preventDefault();
     /**
@@ -120,19 +130,49 @@ class TableContainer extends Component {
       case 39: // right
         key = keys[index + 1] === "id" ? null : keys[index + 1];
         if (key) this.changeData({ id, key }, null);
+        else {
+          val = this.getValFromArray(
+            upNDownArgs.array,
+            upNDownArgs.index + 1,
+            keys[index]
+          );
+          id = this.getValFromArray(
+            upNDownArgs.array,
+            upNDownArgs.index + 1,
+            "id"
+          );
+          key = this.findFirstColEditable(keys, index);
+          if (val || val === "") this.changeData({ id, key }, null);
+        }
         break;
 
       case 38: // up
         key = keys[index];
-        val = this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, keys[index]);
-        id = this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, "id");
+        val = this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index - 1,
+          keys[index]
+        );
+        id = this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index - 1,
+          "id"
+        );
         if (val || val === "") this.changeData({ id, key }, null);
         break;
 
       case 40: // down
         key = keys[index];
-        val = this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, keys[index]);
-        id = this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, "id");
+        val = this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index + 1,
+          keys[index]
+        );
+        id = this.getValFromArray(
+          upNDownArgs.array,
+          upNDownArgs.index + 1,
+          "id"
+        );
         if (val || val === "") this.changeData({ id, key }, null);
         break;
 
@@ -182,12 +222,14 @@ class TableContainer extends Component {
     /* const newElm = arrayFlattenProp(this, [data[0]], (key, val, item) => "")[0];
     newElm.id = maxInArrayByKey(data, "id") + 1;
     data.push(newElm); */
-    data.push(arrayFlattenProp(
-      this,
-      [data[0]],
-      (key, val, item) =>
-        key === "id" ? maxInArrayByKey(data, "id") + 1 : ""
-    )[0]);
+    data.push(
+      arrayFlattenProp(
+        this,
+        [data[0]],
+        (key, val, item) =>
+          key === "id" ? maxInArrayByKey(data, "id") + 1 : ""
+      )[0]
+    );
     this.setData(data);
   };
 
@@ -195,16 +237,19 @@ class TableContainer extends Component {
     let button = "";
     let newElmButton = "";
     if (this.state.data.length) {
-      button = (<div className={classes.divFloated}>
-        <button onClick={this.arrowsNavHandler}>
-          {this.state.arrowInsideInputs ? "Habilitar " : "Deshabilitar "}
-          navegación con flechas rápida
-        </button>
-		</div>
+      button = (
+        <div className={classes.divFloated}>
+          <button onClick={this.arrowsNavHandler}>
+            {this.state.arrowInsideInputs ? "Habilitar " : "Deshabilitar "}
+            navegación con flechas rápida
+          </button>
+        </div>
       );
-      newElmButton = <div className={[classes.flexCenter, classes.divSpacing].join(" ")}>
+      newElmButton = (
+        <div className={[classes.flexCenter, classes.divSpacing].join(" ")}>
           <button onClick={this.addNewElement}>Nuevo</button>
-        </div>;
+        </div>
+      );
     }
 
     return (
