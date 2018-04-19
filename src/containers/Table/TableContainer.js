@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Table from "../../components/Table/Table";
-import { maxInArrayByKey } from "../../customjs/custom";
+import { maxInArrayByKey, arrayFlattenProp } from "../../customjs/custom";
 
 import classes from "../../components/Table/Table.css";
 
@@ -24,14 +24,11 @@ class TableContainer extends Component {
    * Devuelve los datos sin marca de edición
    */
   getData() {
-    return this.state.data.map(elm => {
-      for (let key in elm) {
-        if (elm[key].hasOwnProperty("editable")) {
-          elm[key] = elm[key]["editable"];
-        }
-      }
-      return elm;
-    });
+    return arrayFlattenProp(
+      this,
+      this.state.data,
+      (key, val, item) => val.hasOwnProperty("editable") ? val["editable"] : val
+    );
   }
 
   /**
@@ -101,85 +98,42 @@ class TableContainer extends Component {
     /**
      * saca las propiedades de el objeto data.elm
      */
-    const keys = [];
-    for (let key in data.elm) {
-      keys.push(key);
-    }
+    const keys = Object.entries(data.elm).map(pair => pair[0]);
     /**
      * saca el índice de las propiedades que tengan la key data.elmData.key
      * (la key del input que se está editando)
      */
     const index = keys.findIndex(key => key === data.elmData.key);
+    let id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
     /**
      * Obtiene el key y el value de cada elemento junto al input que se está editando
      */
-    const result = {
-      prev: {
-        key: keys[index - 1] === "id" ? null : keys[index - 1],
-        val: data.elm[keys[index - 1]]
-      },
-      curr: { key: keys[index], val: data.elm[keys[index]] },
-      next: {
-        key: keys[index + 1] === "id" ? null : keys[index + 1],
-        val: data.elm[keys[index + 1]]
-      },
-      up: {
-        key: keys[index],
-        val: this.getValFromArray(
-          upNDownArgs.array,
-          upNDownArgs.index - 1,
-          keys[index]
-        )
-      },
-      down: {
-        key: keys[index],
-        val: this.getValFromArray(
-          upNDownArgs.array,
-          upNDownArgs.index + 1,
-          keys[index]
-        )
-      }
-    };
-    const id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
+    let key = null;
+    let val = null;
     switch (event.which) {
       case 37: // left
-        if (result.prev.key)
-          this.changeData({ id, key: result.prev.key }, null);
+        key = keys[index - 1] === "id" ? null : keys[index - 1];
+        if (key) this.changeData({ id, key }, null);
+        break;
+
+      case 9: // tab
+      case 39: // right
+        key = keys[index + 1] === "id" ? null : keys[index + 1];
+        if (key) this.changeData({ id, key }, null);
         break;
 
       case 38: // up
-        if (result.up.val || result.up.val === "")
-          this.changeData(
-            {
-              id: this.getValFromArray(
-                upNDownArgs.array,
-                upNDownArgs.index - 1,
-                "id"
-              ),
-              key: result.up.key
-            },
-            null
-          );
-        break;
-
-      case 39: // right
-        if (result.next.key)
-          this.changeData({ id, key: result.next.key }, null);
+        key = keys[index];
+        val = this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, keys[index]);
+        id = this.getValFromArray(upNDownArgs.array, upNDownArgs.index - 1, "id");
+        if (val || val === "") this.changeData({ id, key }, null);
         break;
 
       case 40: // down
-        if (result.down.val || result.down.val === "")
-          this.changeData(
-            {
-              id: this.getValFromArray(
-                upNDownArgs.array,
-                upNDownArgs.index + 1,
-                "id"
-              ),
-              key: result.down.key
-            },
-            null
-          );
+        key = keys[index];
+        val = this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, keys[index]);
+        id = this.getValFromArray(upNDownArgs.array, upNDownArgs.index + 1, "id");
+        if (val || val === "") this.changeData({ id, key }, null);
         break;
 
       default:
@@ -191,15 +145,16 @@ class TableContainer extends Component {
    * Función que maneja el evento de flechas presionadas en el teclado
    */
   onKeyDown = (event, data, upNDownArgs) => {
-    //valida si es un evento de flecha
-    if (event.which >= 37 && event.which <= 40) {
+    // valida si es un evento de tabulación o de flecha
+    if (event.which === 9 || (event.which >= 37 && event.which <= 40)) {
+      // valida si está habilitado el movimiento del cursor dentro del input con las flechas
       if (this.state.arrowInsideInputs) {
-        if (event.which === 37) {
+        if (event.which === 37) {// Left
           const position = event.target.selectionStart;
           if (position > 0) {
             /* console.log("no navega", { position }); */
           } else this.navigation(event, data, upNDownArgs);
-        } else if (event.which === 39) {
+        } else if (event.which === 39) {// Right
           const val = event.target.value;
           const position = event.target.selectionStart;
           if (position < val.length) {
@@ -224,12 +179,15 @@ class TableContainer extends Component {
    */
   addNewElement = () => {
     const data = this.getData();
-    const newElm = { ...data[0] };
-    for (let key in newElm) {
-      newElm[key] = "";
-    }
+    /* const newElm = arrayFlattenProp(this, [data[0]], (key, val, item) => "")[0];
     newElm.id = maxInArrayByKey(data, "id") + 1;
-    data.push(newElm);
+    data.push(newElm); */
+    data.push(arrayFlattenProp(
+      this,
+      [data[0]],
+      (key, val, item) =>
+        key === "id" ? maxInArrayByKey(data, "id") + 1 : ""
+    )[0]);
     this.setData(data);
   };
 
