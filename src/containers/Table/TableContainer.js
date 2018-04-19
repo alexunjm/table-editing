@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Table from "../../components/Table/Table";
-import { maxInArrayByKey, arrayFlattenProp } from "../../customjs/custom";
+import _ from "../../customjs/custom";
 
 import classes from "../../components/Table/Table.css";
 
@@ -13,7 +13,7 @@ class TableContainer extends Component {
     data: [
       { id: 1, nombre: "alex", apellido: "jaramillo" },
       { id: 2, nombre: "andrea", apellido: "laguna" },
-      { id: 3, nombre: "valentina", apellido: "" },
+      { id: 3, nombre: "marlon", apellido: "gomez" },
       { id: 6, nombre: "cristian", apellido: "buenaño" },
       { id: 7, nombre: "luisa", apellido: "lopez" }
     ],
@@ -24,9 +24,8 @@ class TableContainer extends Component {
    * Devuelve los datos sin marca de edición
    */
   getData() {
-    return arrayFlattenProp(
+    return _(this.state.data).mapByProperty(
       this,
-      this.state.data,
       (key, val, item) =>
         val.hasOwnProperty("editable") ? val["editable"] : val
     );
@@ -185,10 +184,15 @@ class TableContainer extends Component {
    * Función que maneja el evento de flechas presionadas en el teclado
    */
   onKeyDown = (event, data, upNDownArgs) => {
-    // valida si es un evento de tabulación o de flecha
+    /**
+     * valida si es un evento de tabulación o de flecha
+     */
     if (event.which === 9 || (event.which >= 37 && event.which <= 40)) {
-      // valida si está habilitado el movimiento del cursor dentro del input con las flechas
+      /**
+       * valida si está habilitado el movimiento del cursor dentro del input con las flechas
+       */
       if (this.state.arrowInsideInputs) {
+
         if (event.which === 37) {// Left
           const position = event.target.selectionStart;
           if (position > 0) {
@@ -201,7 +205,7 @@ class TableContainer extends Component {
             /* console.log("no navega", { position, len: val.length }); */
           } else this.navigation(event, data, upNDownArgs);
         } else this.navigation(event, data, upNDownArgs);
-      } else {
+      } else { //solo navegación
         this.navigation(event, data, upNDownArgs);
       }
     }
@@ -219,15 +223,11 @@ class TableContainer extends Component {
    */
   addNewElement = () => {
     const data = this.getData();
-    /* const newElm = arrayFlattenProp(this, [data[0]], (key, val, item) => "")[0];
-    newElm.id = maxInArrayByKey(data, "id") + 1;
-    data.push(newElm); */
     data.push(
-      arrayFlattenProp(
+      _([data[0]]).mapByProperty(
         this,
-        [data[0]],
         (key, val, item) =>
-          key === "id" ? maxInArrayByKey(data, "id") + 1 : ""
+          key === "id" ? _(data).maxInArrayObjectByKey("id") + 1 : ""
       )[0]
     );
     this.setData(data);
