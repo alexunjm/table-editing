@@ -45,9 +45,6 @@ td>input {
 }
 
 button {
-  color: var(--primary-color);
-  background-color: var(--primary-bg-color);
-  border-color: var(--primary-bg-color);
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -67,13 +64,4 @@ button {
 
 button:not(:disabled) {
   cursor: pointer;
-}
-
-button:hover {
-  background-color: var(--primary-bg-color-hover);
-}
-
-button:focus {
-  box-shadow: 0 0 0 0.2rem var(--primary-shadow-color);
-  outline: 0;
 }

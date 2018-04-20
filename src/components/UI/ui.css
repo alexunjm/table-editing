@@ -1,0 +1,14 @@
+.btnPrimary {
+  color: var(--primary-color);
+  background-color: var(--primary-bg-color);
+  border-color: var(--primary-bg-color);
+}
+
+.btnPrimary:hover {
+  background-color: var(--primary-bg-color-hover);
+}
+
+.btnPrimary:focus {
+  box-shadow: 0 0 0 0.2rem var(--primary-shadow-color);
+  outline: 0;
+}
