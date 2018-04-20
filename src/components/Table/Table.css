@@ -7,8 +7,8 @@
 }
 
 .tableStriped> thead tr {
-  background-color: var(--main-bg-color);
-  color: var(--main-color);
+  background-color: var(--primary-bg-color);
+  color: var(--primary-color);
 }
 
 .tdBorder {
