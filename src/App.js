@@ -5,11 +5,11 @@ import TableContainer from './containers/Table/TableContainer';
 
 class App extends Component {
   render() {
-    return <div>
+    return (
         <Layout>
           <TableContainer />
         </Layout>
-      </div>;
+      );
   }
 }
 
