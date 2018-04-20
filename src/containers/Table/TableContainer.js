@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
-import Table from "../../components/Table/Table";
 import _ from "../../customjs/custom";
+
+import Table from "../../components/Table/Table";
+import ButtonUI from "../../components/UI/Button/Button";
 
 import classes from "../../components/Table/Table.css";
 
@@ -104,9 +106,8 @@ class TableContainer extends Component {
 
   navigation(event, data, upNDownArgs) {
     event.preventDefault();
-    /**
-     * saca las propiedades de el objeto data.elm
-     */
+
+    // saca las propiedades de el objeto data.elm
     const keys = Object.entries(data.elm).map(pair => pair[0]);
     /**
      * saca el índice de las propiedades que tengan la key data.elmData.key
@@ -114,9 +115,8 @@ class TableContainer extends Component {
      */
     const index = keys.findIndex(key => key === data.elmData.key);
     let id = data.elm.id.editable ? data.elm.id.editable : data.elm.id;
-    /**
-     * Obtiene el key y el value de cada elemento junto al input que se está editando
-     */
+
+    // Obtiene el key y el value de cada elemento junto al input que se está editando
     let key = null;
     let val = null;
     switch (event.which) {
@@ -184,13 +184,11 @@ class TableContainer extends Component {
    * Función que maneja el evento de flechas presionadas en el teclado
    */
   onKeyDown = (event, data, upNDownArgs) => {
-    /**
-     * valida si es un evento de tabulación o de flecha
-     */
+
+    // valida si es un evento de tabulación o de flecha
     if (event.which === 9 || (event.which >= 37 && event.which <= 40)) {
-      /**
-       * valida si está habilitado el movimiento del cursor dentro del input con las flechas
-       */
+
+      // valida si está habilitado el movimiento del cursor dentro del input con las flechas
       if (this.state.arrowInsideInputs) {
 
         if (event.which === 37) {// Left
@@ -239,17 +237,17 @@ class TableContainer extends Component {
     if (this.state.data.length) {
       button = (
         <div className={classes.divFloated}>
-          <button onClick={this.arrowsNavHandler}>
+          <ButtonUI type={["primary"]} clicked={this.arrowsNavHandler}>
             {this.state.arrowInsideInputs ? "Habilitar " : "Deshabilitar "}
             navegación con flechas rápida
-          </button>
+          </ButtonUI>
         </div>
       );
-      newElmButton = (
-        <div className={[classes.flexCenter, classes.divSpacing].join(" ")}>
-          <button onClick={this.addNewElement}>Nuevo</button>
-        </div>
-      );
+      newElmButton = <div className={[classes.flexCenter, classes.divSpacing].join(" ")}>
+          <ButtonUI type={["primary"]} clicked={this.addNewElement}>
+            Nuevo
+          </ButtonUI>
+        </div>;
     }
 
     return (
